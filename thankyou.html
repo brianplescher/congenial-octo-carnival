@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Thank You | Brian L. Plescher</title>
+  <meta name="description" content="Thank you for reaching out to Brian L. Plescher. Your message has been received. Redirecting you to the homepage shortly." />
+
+  <!-- Redirect after 8 seconds -->
+  <meta http-equiv="refresh" content="8;url=https://www.brianplescher.com/">
+
+  <!-- Canonical / Social -->
+  <link rel="canonical" href="https://www.brianplescher.com/thankyou.html">
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Thank You — Brian L. Plescher">
+  <meta property="og:description" content="Your message has been received. Redirecting you to the homepage shortly.">
+  <meta property="og:url" content="https://www.brianplescher.com/thankyou.html">
+  <meta property="og:image" content="https://www.brianplescher.com/images/woundwise_cover_seo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Thank You — Brian L. Plescher">
+  <meta name="twitter:description" content="Your message has been received. Redirecting you to the homepage shortly.">
+  <meta name="twitter:image" content="https://www.brianplescher.com/images/woundwise_cover_seo.png">
+
+  <!-- Fonts -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@700&display=swap" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    :root{
+      --background:#FAFAFA;--text:#18181B;--muted:#3F3F45;--deepblue:#3D4054;
+      --indigo:#5A6B99;--softshadow:#ececec;--footer:#f5f4f1;
+      --space-xs:.5rem;--space-sm:.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;
+      --space-2xl:3rem;--space-3xl:4rem;--text-sm:.875rem;--text-lg:1.125rem;
+      --text-xl:1.25rem;--text-2xl:1.5rem;--text-3xl:2rem;--border-radius-md:18px;--transition-base:.2s;
+    }
+
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--background);font-family:'Inter',sans-serif;color:var(--text);line-height:1.6;text-align:center;overflow-x:hidden}
+
+    /* Skip link */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;}
+    .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:.5rem .75rem;background:#fff;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,.12);z-index:9999}
+
+    /* NAV */
+    nav{display:flex;justify-content:space-between;align-items:center;padding:var(--space-xl)5vw var(--space-lg)4vw;font-size:var(--text-lg)}
+    .brand{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--muted);font-size:var(--text-xl)}
+    .navlinks{display:flex;gap:var(--space-xl);overflow-x:auto;scrollbar-width:none}
+    .navlinks::-webkit-scrollbar{display:none}
+    .navlinks a{color:var(--muted);text-decoration:none;transition:color var(--transition-base)}
+    .navlinks a:hover,.navlinks a:focus{color:var(--deepblue)}
+
+    /* MAIN */
+    main{display:flex;flex-direction:column;align-items:center;justify-content:center;height:calc(100vh - 180px);padding:0 1.5rem}
+    h1{font-family:'Space Grotesk',sans-serif;font-size:var(--text-3xl);margin-bottom:var(--space-md);opacity:0;animation:fadeUp .8s ease-out .2s forwards}
+    p{font-size:var(--text-lg);color:var(--muted);margin-bottom:var(--space-xl);max-width:560px;opacity:0;animation:fadeUp .8s ease-out .4s forwards}
+    .btn-home{display:inline-block;background:var(--deepblue);color:#fff;padding:.75rem 1.75rem;border-radius:10px;text-decoration:none;font-weight:600;transition:transform .2s,background .2s;opacity:0;animation:fadeUp .8s ease-out .6s forwards, pulse 2s ease-in-out infinite 1.6s}
+    .btn-home:hover,.btn-home:focus{background:var(--indigo);transform:translateY(-3px);outline:none}
+
+    /* FOOTER */
+    footer{text-align:center;padding:var(--space-2xl) var(--space-lg) var(--space-lg);color:var(--muted);background:var(--footer);font-size:var(--text-sm);border-top:1px solid #e6e6e6}
+    .footer-social{margin:var(--space-2xl)0 var(--space-md)0;text-align:center}
+    .footer-social a{display:inline-block;margin:0 var(--space-sm);color:var(--indigo);font-size:var(--text-2xl);padding:var(--space-sm)}
+    .footer-social a:hover,.footer-social a:focus{color:var(--deepblue);background:rgba(224,230,234,.44)}
+
+    /* Animations */
+    @keyframes fadeUp {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse {
+      0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(90,106,153,0);}
+      50%{transform:scale(1.04);box-shadow:0 0 12px rgba(90,106,153,0.25);}
+    }
+
+    @media (max-width:730px){
+      nav{padding:var(--space-lg) var(--space-md)}
+      .navlinks{gap:var(--space-md)}
+      h1{font-size:var(--text-2xl)}
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#content">Skip to main content</a>
+
+  <nav>
+    <div class="brand">Brian L. Plescher</div>
+    <div class="navlinks" role="navigation" aria-label="Main navigation">
+      <a href="index.html">home</a>
+      <a href="woundwise.html">woundwise</a>
+      <a href="essays.html">essays</a>
+      <a href="index.html#about">about</a>
+      <a href="index.html#contact">contact</a>
+    </div>
+  </nav>
+
+  <main id="content" role="main" aria-labelledby="thankyou-heading">
+    <h1 id="thankyou-heading" tabindex="-1">Thank You!</h1>
+    <p>Your message has been received. I appreciate you taking the time to reach out.<br>
+      You’ll be redirected to the homepage in about 8 seconds.</p>
+    <a href="index.html" class="btn-home"><i class="fas fa-arrow-left" aria-hidden="true"></i> Return Home Now</a>
+  </main>
+
+  <footer>
+    <div class="footer-social">
+      <a href="https://www.facebook.com/profile.php?id=61575531786740" target="_blank" aria-label="Facebook" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.instagram.com/brianplescher/" target="_blank" aria-label="Instagram" rel="noopener"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@brianplescher" target="_blank" aria-label="TikTok" rel="noopener"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.youtube.com/@brianplescherauthor" target="_blank" aria-label="YouTube" rel="noopener"><i class="fab fa-youtube"></i></a>
+      <a href="https://www.linkedin.com/in/brianplescher" target="_blank" aria-label="LinkedIn" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+    &copy; 2025 Brian L. Plescher · Experimental methodologies for collective becoming.
+  </footer>
+</body>
+</html>
