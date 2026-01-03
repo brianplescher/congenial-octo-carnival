@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dissolution Map | Brian L. Plescher</title>
+    <meta name="description" content="Interactive knowledge graph exploring the philosophical concepts of Brian L. Plescher.">
+    
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="stylesheet" href="style.css"/>
+
+    <style>
+        body { margin: 0; overflow: hidden; background: #111; }
+        #graph-container { width: 100vw; height: 100vh; }
+        
+        .overlay-ui {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 10;
+            pointer-events: none; /* Let clicks pass through to graph */
+        }
+        
+        .back-link {
+            pointer-events: auto;
+            color: #fff;
+            text-decoration: none;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .back-link:hover { opacity: 1; }
+        
+        .node-label {
+            background: rgba(0,0,0,0.8);
+            color: #eee;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: "Inter", sans-serif;
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            color: #666;
+            font-family: "Inter", sans-serif;
+            font-size: 0.8rem;
+            pointer-events: auto;
+        }
+    </style>
+
+    <!-- Force Graph Library -->
+    <script src="//unpkg.com/force-graph"></script>
+</head>
+<body>
+
+    <div class="overlay-ui">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Home</a>
+        <h1 style="color: #fff; font-size: 2rem; margin-top: 1rem; font-family: Space Grotesk;">Dissolution Map</h1>
+        <p style="color: #aaa; max-width: 300px; font-family: Inter; line-height: 1.5;">
+            Explore the connections between mutual aid, abjective ecology, and collapse. Drag nodes to reshape the web.
+        </p>
+    </div>
+
+    <div id="graph-container"></div>
+
+    <div class="controls">
+        <p>SCROLL to Zoom • DRAG to Move • CLICK to Expand</p>
+    </div>
+
+    <script type="module">
+        import { graphData } from "./js/graph-data.js";
+        
+        const Graph = ForceGraph()
+            (document.getElementById("graph-container"))
+            .graphData(graphData)
+            .nodeLabel("id")
+            .nodeColor(node => node.group === "core" ? "#ef4444" : "#a3a3a3") // Red for core, Grey for essays
+            .nodeVal(node => node.val)
+            .linkColor(() => "rgba(255,255,255,0.2)")
+            .backgroundColor("#111111")
+            .onNodeClick(node => {
+                // Focus on node
+                Graph.centerAt(node.x, node.y, 1000);
+                Graph.zoom(4, 1000); // Zoom in
+                
+                // If it has a link, open it? 
+                // For now, just centering. Could add window.location = node.url if we had urls.
+            });
+            
+            // Text rendering on nodes
+            Graph.nodeCanvasObject((node, ctx, globalScale) => {
+                const label = node.id;
+                const fontSize = 12/globalScale;
+                ctx.font = `${fontSize}px Sans-Serif`;
+                const textWidth = ctx.measureText(label).width;
+                const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
+
+                // circle
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.val, 0, 2 * Math.PI, false);
+                ctx.fillStyle = node.group === "core" ? "#ef4444" : "#a3a3a3";
+                ctx.fill();
+
+                // text
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                ctx.fillText(label, node.x, node.y + node.val + fontSize);
+                
+                node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
+            });
+    </script>
+</body>
+</html>
