@@ -279,8 +279,12 @@
                         <label for="deletionMode">Deletion Mode (Remove excess)</label>
                     </div>
                     
-                    <button class="btnlink" onclick="processText()" id="processBtn" style="width: 100%;">
+                    <button class="btnlink" onclick="processText()" id="processBtn" style="width: 100%; margin-bottom: var(--space-md);">
                         Process Text
+                    </button>
+                    
+                    <button class="btn-small btn-reject" onclick="clearAllText()" style="width: 100%;">
+                        Clear All Text
                     </button>
                     
                     <div class="guidance-preview" id="guidancePreview"></div>
@@ -625,6 +629,26 @@ Please edit this paragraph to align with the guidance. Return only the edited pa
             }).join('');
         }
 
+        function clearAllText() {
+            if (confirm('Are you sure you want to clear all text and results? This cannot be undone.')) {
+                // Clear the input textarea
+                document.getElementById('originalText').value = '';
+                
+                // Clear all results
+                paragraphs = [];
+                currentIndex = -1;
+                processing = false;
+                
+                // Reset UI
+                document.getElementById('results').innerHTML = '';
+                document.getElementById('processBtn').textContent = 'Process Text';
+                document.getElementById('processBtn').disabled = false;
+                
+                // Focus back to the textarea
+                document.getElementById('originalText').focus();
+            }
+        }
+
         function acceptParagraph(index) {
             paragraphs[index].status = 'accepted';
             renderResults();
@@ -660,6 +684,14 @@ Please edit this paragraph to align with the guidance. Return only the edited pa
             document.getElementById('passwordInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     checkPassword();
+                }
+            });
+            
+            // Add keyboard shortcut for clearing text (Ctrl/Cmd + Shift + Delete)
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Delete') {
+                    e.preventDefault();
+                    clearAllText();
                 }
             });
         });
