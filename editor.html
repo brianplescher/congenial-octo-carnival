@@ -328,6 +328,12 @@
             renderResults();
         }
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         function renderResults() {
             const resultsDiv = document.getElementById('results');
             
@@ -349,20 +355,20 @@
                         </div>
                     </div>
                     <div class="paragraph-content">
-                        ${p.analysis ? `<div class="analysis-box"><strong>Analysis:</strong> ${p.analysis}</div>` : ''}
+                        ${p.analysis ? `<div class="analysis-box"><strong>Analysis:</strong> ${escapeHtml(p.analysis)}</div>` : ''}
                         <div style="margin-bottom: 1.5rem;">
                             <strong>Original:</strong>
-                            <p style="margin-top: 0.5rem; color: #6b7280;">${p.original}</p>
+                            <p style="margin-top: 0.5rem; color: #6b7280;">${escapeHtml(p.original)}</p>
                         </div>
                         ${p.edited ? `
                             <div>
                                 <strong>Edited:</strong>
-                                <p style="margin-top: 0.5rem;">${p.edited}</p>
+                                <p style="margin-top: 0.5rem;">${escapeHtml(p.edited)}</p>
                             </div>
                         ` : p.status === 'pending' ? `
                             <div style="color: #6b7280; font-style: italic;">Waiting...</div>
                         ` : p.status === 'error' ? `
-                            <div class="error-message">Error: ${p.error}</div>
+                            <div class="error-message">Error: ${escapeHtml(p.error || 'Unknown error')}</div>
                         ` : `
                             <div style="color: #6366f1; font-style: italic;">Processing...</div>
                         `}
