@@ -127,7 +127,7 @@
             padding: 1rem;
             border-radius: 4px;
             margin-top: 1rem;
-            display: none; /* Hidden by default */
+            display: none;
         }
         
         .success-message {
@@ -136,7 +136,7 @@
             padding: 1rem;
             border-radius: 4px;
             margin-top: 1rem;
-            display: none; /* Hidden by default */
+            display: none;
         }
         
         .analysis-box {
@@ -297,81 +297,55 @@
             }
         }
 
-        // --- UPDATED FUNCTION FOR NETLIFY ---
         async function processOneParagraph(index, chapter, deletionMode, customContext) {
             const paragraph = paragraphs[index];
             renderResults();
 
             try {
-                // Get API key (ask once and store for session)
-                if (!window.claudeApiKey) {
-                    window.claudeApiKey = prompt('Enter your Claude API key:');
-                    if (!window.claudeApiKey) {
-                        throw new Error('API key required');
-                    }
-                }
-
+                // CORRECTION: Prompt removed. Using server-side API key.
                 const systemPrompt = generateSystemPrompt(parseInt(chapter), deletionMode, customContext);
                 
                 console.log('Making request via Netlify Function...');
                 
-                // CALLING THE SERVERLESS FUNCTION
                 const response = await fetch('/api/anthropic', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        apiKey: window.claudeApiKey,
                         systemPrompt: systemPrompt,
                         userContent: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
                     })
                 });
 
-                console.log('Response status:', response.status);
-
                 if (!response.ok) {
                     const errorText = await response.text();
-                    console.error('API error response:', errorText);
                     throw new Error(`API error ${response.status}: ${errorText}`);
                 }
 
                 const claudeData = await response.json();
                 
-                // Handle provider errors wrapped in 200s
                 if (claudeData.error) {
                     throw new Error(claudeData.error.message || JSON.stringify(claudeData.error));
                 }
 
                 const content = claudeData.content[0].text;
-
-                // Parse Claude response
                 const analysisMatch = content.match(/ANALYSIS:\s*(.+?)(?=\n\nREWRITE:)/s);
                 const rewriteMatch = content.match(/REWRITE:\s*(.+)/s);
 
-                const analysis = analysisMatch ? analysisMatch[1].trim() : 'Analysis not available';
-                const editedText = rewriteMatch ? rewriteMatch[1].trim() : paragraph.original;
-
-                paragraph.edited = editedText;
-                paragraph.analysis = analysis;
+                paragraph.analysis = analysisMatch ? analysisMatch[1].trim() : 'Analysis not available';
+                paragraph.edited = rewriteMatch ? rewriteMatch[1].trim() : paragraph.original;
                 paragraph.status = 'completed';
                 
             } catch (error) {
                 console.error('Full error details:', error);
                 paragraph.error = error.message;
-                
-                if (error.message.includes('authentication') || error.message.includes('401')) {
-                    paragraph.error = 'Invalid API key. Please refresh and try again.';
-                    window.claudeApiKey = null; 
-                }
-                
                 paragraph.status = 'error';
             }
             
             renderResults();
         }
 
-        // Helper function for system prompt generation
         function generateSystemPrompt(chapter, deletionMode = false, customContext = '') {
             const techniques = {
                 1: { MW: 1, NH: 2, TC: 1, SAP: 3 },
@@ -545,8 +519,6 @@ REWRITE: (the edited paragraph, no preamble, just the prose)`;
             statusDiv.textContent = message;
             statusDiv.style.display = 'block';
             setTimeout(() => statusDiv.style.display = 'none', 5000);
-            
-            console.log(`Status (${type}):`, message);
         }
 
         function clearAllText() {
@@ -574,7 +546,6 @@ REWRITE: (the edited paragraph, no preamble, just the prose)`;
             });
         }
 
-        // Initialize
         document.getElementById('passwordInput')?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') checkPassword();
         });

@@ -1,13 +1,13 @@
 // netlify/functions/anthropic.js
 
 exports.handler = async function(event, context) {
-    // 1. Handle CORS Preflight (The browser asks "Can I talk to you?" first)
+    // 1. Handle CORS Preflight
     if (event.httpMethod === 'OPTIONS') {
         return {
             statusCode: 200,
             headers: {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+                'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Allow-Methods': 'POST, OPTIONS'
             },
             body: ''
@@ -16,16 +16,27 @@ exports.handler = async function(event, context) {
 
     // 2. Only allow POST requests
     if (event.httpMethod !== 'POST') {
-        return { statusCode: 405, body: 'Method Not Allowed' };
+        return { 
+            statusCode: 405, 
+            body: JSON.stringify({ error: 'Method Not Allowed' }) 
+        };
     }
 
     try {
         // Parse the incoming body from your frontend
+        // We no longer expect or need 'apiKey' to be sent from the browser
         const body = JSON.parse(event.body);
-        const { systemPrompt, userContent, apiKey } = body;
+        const { systemPrompt, userContent } = body;
 
-        if (!apiKey) {
-            return { statusCode: 400, body: JSON.stringify({ error: "Missing API Key" }) };
+        // Pull the key from Netlify Environment Variables
+        const serverSideKey = process.env.ANTHROPIC_API_KEY;
+
+        if (!serverSideKey) {
+            console.error("Environment variable ANTHROPIC_API_KEY is missing in Netlify settings.");
+            return { 
+                statusCode: 500, 
+                body: JSON.stringify({ error: "Server Configuration Error: API Key not found." }) 
+            };
         }
 
         // 3. Make the server-to-server call to Anthropic
@@ -33,7 +44,7 @@ exports.handler = async function(event, context) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': apiKey, // Pass the key sent from frontend
+                'x-api-key': serverSideKey,
                 'anthropic-version': '2023-06-01'
             },
             body: JSON.stringify({
@@ -53,15 +64,17 @@ exports.handler = async function(event, context) {
         return {
             statusCode: response.status,
             headers: {
-                'Access-Control-Allow-Origin': '*', // CORS Header
+                'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         };
 
     } catch (error) {
+        console.error("Function Error:", error.message);
         return {
             statusCode: 500,
+            headers: { 'Access-Control-Allow-Origin': '*' },
             body: JSON.stringify({ error: error.message })
         };
     }
