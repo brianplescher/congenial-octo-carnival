@@ -211,6 +211,11 @@
                         </label>
                     </div>
                     
+                    <div style="background: #fef3c7; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9rem;">
+                        <strong>Note:</strong> Direct API calls may be blocked by browser CORS policy. 
+                        For best results, use a browser extension like "CORS Unblock" or deploy the Netlify functions.
+                    </div>
+                    
                     <button onclick="processText()" id="processBtn" style="width: 100%; padding: 0.75rem; background: #6366f1; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-bottom: 0.75rem;">
                         Process Text
                     </button>
@@ -310,27 +315,57 @@
 
                 const systemPrompt = generateSystemPrompt(parseInt(chapter), deletionMode, customContext);
                 
-                const response = await fetch('https://api.anthropic.com/v1/messages', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': window.claudeApiKey,
-                        'anthropic-version': '2023-06-01'
-                    },
-                    body: JSON.stringify({
-                        model: 'claude-3-5-sonnet-20241022',
-                        max_tokens: 1500,
-                        system: systemPrompt,
-                        messages: [{
-                            role: 'user',
-                            content: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
-                        }]
-                    })
-                });
+                console.log('Making API request...');
+                
+                // Try direct API call first, then CORS proxy if it fails
+                let response;
+                try {
+                    response = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': window.claudeApiKey,
+                            'anthropic-version': '2023-06-01'
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-3-5-sonnet-20241022',
+                            max_tokens: 1500,
+                            system: systemPrompt,
+                            messages: [{
+                                role: 'user',
+                                content: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
+                            }]
+                        })
+                    });
+                } catch (corsError) {
+                    console.log('Direct API failed, trying CORS proxy...');
+                    // Try with a CORS proxy
+                    response = await fetch('https://cors-anywhere.herokuapp.com/https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': window.claudeApiKey,
+                            'anthropic-version': '2023-06-01',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-3-5-sonnet-20241022',
+                            max_tokens: 1500,
+                            system: systemPrompt,
+                            messages: [{
+                                role: 'user',
+                                content: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
+                            }]
+                        })
+                    });
+                }
+
+                console.log('Response status:', response.status);
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error?.message || `API error: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('API error response:', errorText);
+                    throw new Error(`API error ${response.status}: ${errorText}`);
                 }
 
                 const claudeData = await response.json();
@@ -348,14 +383,19 @@
                 paragraph.status = 'completed';
                 
             } catch (error) {
-                paragraph.status = 'error';
-                paragraph.error = error.message;
-                console.error('Processing error:', error);
+                console.error('Full error details:', error);
                 
-                // If API key is invalid, clear it so user can re-enter
-                if (error.message.includes('authentication') || error.message.includes('401')) {
-                    window.claudeApiKey = null;
+                // Handle specific error types
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    paragraph.error = 'CORS Error: Browser blocked the request. Try using a CORS browser extension or contact support to enable Netlify functions.';
+                } else if (error.message.includes('authentication') || error.message.includes('401')) {
+                    paragraph.error = 'Invalid API key. Please check your Claude API key.';
+                    window.claudeApiKey = null; // Clear invalid key
+                } else {
+                    paragraph.error = error.message;
                 }
+                
+                paragraph.status = 'error';
             }
             
             renderResults();
