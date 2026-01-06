@@ -261,21 +261,6 @@
                 return;
             }
 
-            // First test if Netlify functions are working
-            try {
-                const testResponse = await fetch('/.netlify/functions/test');
-                if (testResponse.ok) {
-                    const testData = await testResponse.json();
-                    showStatus(`Functions working: ${testData.message}`, 'success');
-                } else {
-                    showStatus('Netlify functions not available - check deployment', 'error');
-                    return;
-                }
-            } catch (error) {
-                showStatus(`Function test failed: ${error.message}`, 'error');
-                return;
-            }
-
             const chapter = document.getElementById('chapterSelect').value;
             const deletionMode = document.getElementById('deletionMode').checked;
             const customContext = document.getElementById('customContext').value;
@@ -315,92 +300,62 @@
             renderResults();
 
             try {
-                // First try Netlify functions
-                let response;
-                let useDirectAPI = false;
+                // Get API key (ask once and store for session)
+                if (!window.claudeApiKey) {
+                    window.claudeApiKey = prompt('Enter your Claude API key:');
+                    if (!window.claudeApiKey) {
+                        throw new Error('API key required');
+                    }
+                }
+
+                const systemPrompt = generateSystemPrompt(parseInt(chapter), deletionMode, customContext);
                 
-                try {
-                    console.log('Trying Netlify function...');
-                    response = await fetch('/.netlify/functions/edit-simple', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            text: paragraph.original,
-                            chapter: parseInt(chapter),
-                            deletionMode: deletionMode,
-                            customContext: customContext
-                        })
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`Netlify function failed: ${response.status}`);
-                    }
-                } catch (error) {
-                    console.log('Netlify function failed, trying direct API:', error.message);
-                    useDirectAPI = true;
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': window.claudeApiKey,
+                        'anthropic-version': '2023-06-01'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-3-5-sonnet-20241022',
+                        max_tokens: 1500,
+                        system: systemPrompt,
+                        messages: [{
+                            role: 'user',
+                            content: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `API error: ${response.status}`);
                 }
 
-                // Fallback to direct Claude API call
-                if (useDirectAPI) {
-                    const apiKey = prompt('Netlify functions are not available. Enter your Claude API key to use direct API:');
-                    if (!apiKey) {
-                        throw new Error('API key required for direct API access');
-                    }
+                const claudeData = await response.json();
+                const content = claudeData.content[0].text;
 
-                    const systemPrompt = generateSystemPrompt(parseInt(chapter), deletionMode, customContext);
-                    
-                    response = await fetch('https://api.anthropic.com/v1/messages', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'x-api-key': apiKey,
-                            'anthropic-version': '2023-06-01'
-                        },
-                        body: JSON.stringify({
-                            model: 'claude-3-5-sonnet-20241022',
-                            max_tokens: 1500,
-                            system: systemPrompt,
-                            messages: [{
-                                role: 'user',
-                                content: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
-                            }]
-                        })
-                    });
+                // Parse Claude response
+                const analysisMatch = content.match(/ANALYSIS:\s*(.+?)(?=\n\nREWRITE:)/s);
+                const rewriteMatch = content.match(/REWRITE:\s*(.+)/s);
 
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error?.message || `API error: ${response.status}`);
-                    }
+                const analysis = analysisMatch ? analysisMatch[1].trim() : 'Analysis not available';
+                const editedText = rewriteMatch ? rewriteMatch[1].trim() : paragraph.original;
 
-                    const claudeData = await response.json();
-                    const content = claudeData.content[0].text;
-
-                    // Parse Claude response
-                    const analysisMatch = content.match(/ANALYSIS:\s*(.+?)(?=\n\nREWRITE:)/s);
-                    const rewriteMatch = content.match(/REWRITE:\s*(.+)/s);
-
-                    const analysis = analysisMatch ? analysisMatch[1].trim() : 'Analysis not available';
-                    const editedText = rewriteMatch ? rewriteMatch[1].trim() : paragraph.original;
-
-                    paragraph.edited = editedText;
-                    paragraph.analysis = analysis;
-                    paragraph.status = 'completed';
-                } else {
-                    // Process Netlify function response
-                    const data = await response.json();
-                    paragraph.edited = data.edited_text;
-                    paragraph.analysis = data.analysis;
-                    paragraph.status = 'completed';
-                    
-                    if (data.diagnostics) {
-                        console.log('Function diagnostics:', data.diagnostics);
-                    }
-                }
+                paragraph.edited = editedText;
+                paragraph.analysis = analysis;
+                paragraph.status = 'completed';
                 
             } catch (error) {
                 paragraph.status = 'error';
                 paragraph.error = error.message;
                 console.error('Processing error:', error);
+                
+                // If API key is invalid, clear it so user can re-enter
+                if (error.message.includes('authentication') || error.message.includes('401')) {
+                    window.claudeApiKey = null;
+                }
             }
             
             renderResults();
