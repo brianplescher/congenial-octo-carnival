@@ -315,54 +315,214 @@
             renderResults();
 
             try {
-                // Try multiple endpoints in order
-                const endpoints = [
-                    '/.netlify/functions/edit',  // Netlify production
-                    '/netlify/functions/edit',   // Alternative Netlify path
-                    '/api/edit'                  // Fallback/local
-                ];
-
+                // First try Netlify functions
                 let response;
-                let lastError;
+                let useDirectAPI = false;
+                
+                try {
+                    console.log('Trying Netlify function...');
+                    response = await fetch('/.netlify/functions/edit-simple', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            text: paragraph.original,
+                            chapter: parseInt(chapter),
+                            deletionMode: deletionMode,
+                            customContext: customContext
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Netlify function failed: ${response.status}`);
+                    }
+                } catch (error) {
+                    console.log('Netlify function failed, trying direct API:', error.message);
+                    useDirectAPI = true;
+                }
 
-                for (const endpoint of endpoints) {
-                    try {
-                        response = await fetch(endpoint, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                text: paragraph.original,
-                                chapter: parseInt(chapter),
-                                deletionMode: deletionMode,
-                                customContext: customContext
-                            })
-                        });
+                // Fallback to direct Claude API call
+                if (useDirectAPI) {
+                    const apiKey = prompt('Netlify functions are not available. Enter your Claude API key to use direct API:');
+                    if (!apiKey) {
+                        throw new Error('API key required for direct API access');
+                    }
 
-                        if (response.ok) {
-                            break; // Success, exit the loop
-                        } else {
-                            lastError = `HTTP ${response.status}`;
-                        }
-                    } catch (error) {
-                        lastError = error.message;
-                        continue; // Try next endpoint
+                    const systemPrompt = generateSystemPrompt(parseInt(chapter), deletionMode, customContext);
+                    
+                    response = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': apiKey,
+                            'anthropic-version': '2023-06-01'
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-3-5-sonnet-20241022',
+                            max_tokens: 1500,
+                            system: systemPrompt,
+                            messages: [{
+                                role: 'user',
+                                content: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
+                            }]
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error?.message || `API error: ${response.status}`);
+                    }
+
+                    const claudeData = await response.json();
+                    const content = claudeData.content[0].text;
+
+                    // Parse Claude response
+                    const analysisMatch = content.match(/ANALYSIS:\s*(.+?)(?=\n\nREWRITE:)/s);
+                    const rewriteMatch = content.match(/REWRITE:\s*(.+)/s);
+
+                    const analysis = analysisMatch ? analysisMatch[1].trim() : 'Analysis not available';
+                    const editedText = rewriteMatch ? rewriteMatch[1].trim() : paragraph.original;
+
+                    paragraph.edited = editedText;
+                    paragraph.analysis = analysis;
+                    paragraph.status = 'completed';
+                } else {
+                    // Process Netlify function response
+                    const data = await response.json();
+                    paragraph.edited = data.edited_text;
+                    paragraph.analysis = data.analysis;
+                    paragraph.status = 'completed';
+                    
+                    if (data.diagnostics) {
+                        console.log('Function diagnostics:', data.diagnostics);
                     }
                 }
-
-                if (!response || !response.ok) {
-                    throw new Error(`All endpoints failed. Last error: ${lastError}`);
-                }
-
-                const data = await response.json();
-                paragraph.edited = data.edited_text;
-                paragraph.analysis = data.analysis;
-                paragraph.status = 'completed';
+                
             } catch (error) {
                 paragraph.status = 'error';
                 paragraph.error = error.message;
+                console.error('Processing error:', error);
             }
             
             renderResults();
+        }
+
+        // Helper function for direct API calls
+        function generateSystemPrompt(chapter, deletionMode = false, customContext = '') {
+            const techniques = {
+                1: { MW: 1, NH: 2, TC: 1, SAP: 3 },
+                2: { NH: 3, SAP: 2 },
+                3: { MW: 3, NH: 1, SAP: 2 },
+                4: { PP: 3, TC: 3 },
+                5: { PP: 1, AK: 3, TC: 1 },
+                6: { MW: 3, PP: 3, NH: 3, AK: 1, TC: 3, SAP: 3 },
+                7: { AK: 3, LO: 3, SAP: 1 },
+                8: { MW: 1, PP: 2, NH: 3, TC: 1 },
+                9: { MW: 2, NH: 1, AK: 2, LO: 2 },
+                10: { MW: 2, PP: 1, TC: 2, LO: 2, SAP: 2 }
+            };
+
+            const plotFunctions = {
+                1: "Entry/Threshold — narrator enters charged landscape, movement through space, first sensory anchor contact, no inciting incident",
+                2: "Orientation Through Absence — world explained by what's missing, gaps in records/maps, authority encountered indirectly",
+                3: "Pattern Emergence — repetition reveals structure, objects recur, spaces revisited, quiet recognition through accumulation",
+                4: "Compression — pressure replaces progression, tasks accelerate, interior/exterior collapse, shift from observation to occupation",
+                5: "Fracture — narrative coherence fails, bodily strain/breakdown, contradictory sequences, crisis not climax",
+                6: "The Grinding Stones (KEYSTONE) — past and present fully coexist, historical labor intrudes bodily, possession not memory, structural center",
+                7: "Human Labor — meaning enacted not interpreted, sustained physical work, exhaustion replaces insight, rebuilds through body",
+                8: "Recognition Without Resolution — understanding arrives but solves nothing, awareness sharpens, no action follows, refuses catharsis",
+                9: "Reverberation — consequences unfold quietly, small gestures, spaces register what occurred, aftermath without spectacle",
+                10: "Integration/Exit — return to threshold, sensory anchor reappears altered, closure through recontextualization not resolution"
+            };
+
+            const forbidden = {
+                1: "No backstory. No motivation statements. No explanation of arrival.",
+                2: "No historical exposition. No corrective narration. No filling gaps.",
+                3: "No symbolic interpretation of objects. No thematic summary.",
+                4: "No pauses for reflection. No clarifying transitions.",
+                5: "No repair of coherence. No emotional resolution.",
+                6: "No dates. No named historical explanations. No interpretive framing of stones.",
+                7: "No metaphorical labor. No insight following work. No abstraction.",
+                8: "No decisions. No actions taken. No moral resolution.",
+                9: "No dramatization of aftermath. No explicit consequence statements.",
+                10: "No summative explanation. No meaning statements. No closure language."
+            };
+
+            const chapterTechniques = techniques[chapter] || {};
+            const plotFunction = plotFunctions[chapter] || '';
+            const chapterForbidden = forbidden[chapter] || '';
+
+            let prompt = `You are editing historical fiction using canonical experimental techniques. Your edits must be surgical and authoritative.
+
+CHAPTER ${chapter} ARCHITECTURE:
+${plotFunction}
+
+TECHNIQUES FOR THIS CHAPTER:`;
+
+            const dominant = [];
+            const active = [];
+            const present = [];
+
+            Object.entries(chapterTechniques).forEach(([code, level]) => {
+                const names = {
+                    MW: 'Material Witness',
+                    PP: 'Polyphonic Possession',
+                    NH: 'Negative Historiography',
+                    AK: 'Abjection as Knowledge',
+                    TC: 'Temporal Collapse',
+                    LO: 'Labor as Ontology',
+                    SAP: 'Sensory Anchor Portal'
+                };
+                const name = names[code];
+                if (level === 3) dominant.push(name);
+                else if (level === 2) active.push(name);
+                else if (level === 1) present.push(name);
+            });
+
+            if (dominant.length) prompt += `\nDOMINANT (primary): ${dominant.join(', ')}`;
+            if (active.length) prompt += `\nACTIVE (strong): ${active.join(', ')}`;
+            if (present.length) prompt += `\nPRESENT (subtle): ${present.join(', ')}`;
+
+            prompt += `
+
+TECHNIQUE DEFINITIONS:
+• Material Witness: Objects testify through wear/damage/persistence, NOT symbolism. NO interpretation.
+• Polyphonic Possession: Multiple consciousnesses inhabit narrator without quotation marks/framing. NO reflection on possession.
+• Negative Historiography: Meaning from gaps/erasure/missing docs. Name what's absent, don't fill it. NO exposition.
+• Abjection as Knowledge: Understanding through bodily degradation. Sensation BEFORE thought. NO aestheticizing.
+• Temporal Collapse: Multiple times in same sentence, no hierarchy. NO clear before/after. NO flashback framing.
+• Labor as Ontology: Identity through repetitive physical work. Thought FROM action. NO metaphorical labor.
+• Sensory Anchor Portal: Concrete sensation opens temporal layers involuntarily. NO "I remembered." NO explanation.
+
+CRITICAL PRINCIPLE:
+This plot is TECTONIC not DRAMATIC. Pressure replaces conflict. Contact replaces climax. Reverberation replaces resolution.
+Do not add false drama. Do not create conflict where pressure suffices.
+
+FORBIDDEN IN THIS CHAPTER:
+${chapterForbidden}`;
+
+            if (deletionMode) {
+                prompt += `
+
+DELETION MODE ACTIVE:
+If paragraph already conforms, improve by REMOVING excess explanation, softening emphasis, tightening sentences.
+Do not add imagery or insight unless structurally necessary.`;
+            }
+
+            if (customContext) {
+                prompt += `
+
+ADDITIONAL CONTEXT:
+${customContext}`;
+            }
+
+            prompt += `
+
+OUTPUT FORMAT:
+Provide exactly two sections:
+ANALYSIS: (2-3 sentences only) What works, what needs adjustment, what failure modes to avoid
+REWRITE: (the edited paragraph, no preamble, just the prose)`;
+
+            return prompt;
         }
 
         function escapeHtml(text) {

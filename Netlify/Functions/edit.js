@@ -152,7 +152,7 @@ exports.handler = async (event, context) => {
       };
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.ClaudeAPI || process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
       return {
         statusCode: 500,
