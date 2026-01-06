@@ -127,6 +127,7 @@
             padding: 1rem;
             border-radius: 4px;
             margin-top: 1rem;
+            display: none; /* Hidden by default */
         }
         
         .success-message {
@@ -135,6 +136,7 @@
             padding: 1rem;
             border-radius: 4px;
             margin-top: 1rem;
+            display: none; /* Hidden by default */
         }
         
         .analysis-box {
@@ -153,7 +155,6 @@
     </style>
 </head>
 <body>
-    <!-- Password Screen -->
     <div id="passwordScreen" class="password-screen">
         <div class="password-form">
             <h1 style="margin-bottom: 1.5rem; text-align: center;">Editor Access</h1>
@@ -161,11 +162,10 @@
                 <input type="password" id="passwordInput" placeholder="Enter password" />
             </div>
             <button onclick="checkPassword()" style="width: 100%; padding: 0.75rem; background: #6366f1; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Enter</button>
-            <div id="passwordError" class="error-message" style="display: none;">Incorrect password</div>
+            <div id="passwordError" class="error-message">Incorrect password</div>
         </div>
     </div>
 
-    <!-- Main Editor Interface -->
     <div id="editorInterface" style="display: none;">
         <nav style="background: white; padding: 1rem 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 2rem;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -179,7 +179,6 @@
 
         <div class="editor-container">
             <div class="editor-grid">
-                <!-- Controls Panel -->
                 <div class="controls-panel">
                     <h2 style="margin-top: 0;">Controls</h2>
                     
@@ -211,9 +210,8 @@
                         </label>
                     </div>
                     
-                    <div style="background: #fef3c7; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9rem;">
-                        <strong>Note:</strong> Direct API calls may be blocked by browser CORS policy. 
-                        For best results, use a browser extension like "CORS Unblock" or deploy the Netlify functions.
+                    <div style="background: #e0e7ff; color: #3730a3; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9rem; border-left: 4px solid #6366f1;">
+                        <strong>Status:</strong> Connected to Netlify Secure Function.
                     </div>
                     
                     <button onclick="processText()" id="processBtn" style="width: 100%; padding: 0.75rem; background: #6366f1; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-bottom: 0.75rem;">
@@ -227,7 +225,6 @@
                     <div id="statusMessage"></div>
                 </div>
 
-                <!-- Main Editor Area -->
                 <div>
                     <div class="text-input" style="background: white; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); margin-bottom: 2rem;">
                         <textarea id="originalText" placeholder="Paste your text here (separate paragraphs with blank lines)..."></textarea>
@@ -245,7 +242,7 @@
 
         function checkPassword() {
             const input = document.getElementById('passwordInput').value;
-            const correctPassword = 'stones'; // Change this
+            const correctPassword = 'stones'; 
             
             if (input === correctPassword) {
                 document.getElementById('passwordScreen').style.display = 'none';
@@ -300,6 +297,7 @@
             }
         }
 
+        // --- UPDATED FUNCTION FOR NETLIFY ---
         async function processOneParagraph(index, chapter, deletionMode, customContext) {
             const paragraph = paragraphs[index];
             renderResults();
@@ -315,50 +313,20 @@
 
                 const systemPrompt = generateSystemPrompt(parseInt(chapter), deletionMode, customContext);
                 
-                console.log('Making API request...');
+                console.log('Making request via Netlify Function...');
                 
-                // Try direct API call first, then CORS proxy if it fails
-                let response;
-                try {
-                    response = await fetch('https://api.anthropic.com/v1/messages', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'x-api-key': window.claudeApiKey,
-                            'anthropic-version': '2023-06-01'
-                        },
-                        body: JSON.stringify({
-                            model: 'claude-3-5-sonnet-20241022',
-                            max_tokens: 1500,
-                            system: systemPrompt,
-                            messages: [{
-                                role: 'user',
-                                content: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
-                            }]
-                        })
-                    });
-                } catch (corsError) {
-                    console.log('Direct API failed, trying CORS proxy...');
-                    // Try with a CORS proxy
-                    response = await fetch('https://cors-anywhere.herokuapp.com/https://api.anthropic.com/v1/messages', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'x-api-key': window.claudeApiKey,
-                            'anthropic-version': '2023-06-01',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: JSON.stringify({
-                            model: 'claude-3-5-sonnet-20241022',
-                            max_tokens: 1500,
-                            system: systemPrompt,
-                            messages: [{
-                                role: 'user',
-                                content: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
-                            }]
-                        })
-                    });
-                }
+                // CALLING THE SERVERLESS FUNCTION
+                const response = await fetch('/api/anthropic', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        apiKey: window.claudeApiKey,
+                        systemPrompt: systemPrompt,
+                        userContent: `ORIGINAL PARAGRAPH:\n${paragraph.original}`
+                    })
+                });
 
                 console.log('Response status:', response.status);
 
@@ -369,6 +337,12 @@
                 }
 
                 const claudeData = await response.json();
+                
+                // Handle provider errors wrapped in 200s
+                if (claudeData.error) {
+                    throw new Error(claudeData.error.message || JSON.stringify(claudeData.error));
+                }
+
                 const content = claudeData.content[0].text;
 
                 // Parse Claude response
@@ -384,15 +358,11 @@
                 
             } catch (error) {
                 console.error('Full error details:', error);
+                paragraph.error = error.message;
                 
-                // Handle specific error types
-                if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                    paragraph.error = 'CORS Error: Browser blocked the request. Try using a CORS browser extension or contact support to enable Netlify functions.';
-                } else if (error.message.includes('authentication') || error.message.includes('401')) {
-                    paragraph.error = 'Invalid API key. Please check your Claude API key.';
-                    window.claudeApiKey = null; // Clear invalid key
-                } else {
-                    paragraph.error = error.message;
+                if (error.message.includes('authentication') || error.message.includes('401')) {
+                    paragraph.error = 'Invalid API key. Please refresh and try again.';
+                    window.claudeApiKey = null; 
                 }
                 
                 paragraph.status = 'error';
@@ -401,7 +371,7 @@
             renderResults();
         }
 
-        // Helper function for direct API calls
+        // Helper function for system prompt generation
         function generateSystemPrompt(chapter, deletionMode = false, customContext = '') {
             const techniques = {
                 1: { MW: 1, NH: 2, TC: 1, SAP: 3 },
@@ -576,7 +546,6 @@ REWRITE: (the edited paragraph, no preamble, just the prose)`;
             statusDiv.style.display = 'block';
             setTimeout(() => statusDiv.style.display = 'none', 5000);
             
-            // Also log to console for debugging
             console.log(`Status (${type}):`, message);
         }
 
