@@ -261,6 +261,21 @@
                 return;
             }
 
+            // First test if Netlify functions are working
+            try {
+                const testResponse = await fetch('/.netlify/functions/test');
+                if (testResponse.ok) {
+                    const testData = await testResponse.json();
+                    showStatus(`Functions working: ${testData.message}`, 'success');
+                } else {
+                    showStatus('Netlify functions not available - check deployment', 'error');
+                    return;
+                }
+            } catch (error) {
+                showStatus(`Function test failed: ${error.message}`, 'error');
+                return;
+            }
+
             const chapter = document.getElementById('chapterSelect').value;
             const deletionMode = document.getElementById('deletionMode').checked;
             const customContext = document.getElementById('customContext').value;
@@ -300,20 +315,42 @@
             renderResults();
 
             try {
-                const response = await fetch('/.netlify/functions/edit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        text: paragraph.original,
-                        chapter: parseInt(chapter),
-                        deletionMode: deletionMode,
-                        customContext: customContext
-                    })
-                });
+                // Try multiple endpoints in order
+                const endpoints = [
+                    '/.netlify/functions/edit',  // Netlify production
+                    '/netlify/functions/edit',   // Alternative Netlify path
+                    '/api/edit'                  // Fallback/local
+                ];
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                let response;
+                let lastError;
+
+                for (const endpoint of endpoints) {
+                    try {
+                        response = await fetch(endpoint, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                text: paragraph.original,
+                                chapter: parseInt(chapter),
+                                deletionMode: deletionMode,
+                                customContext: customContext
+                            })
+                        });
+
+                        if (response.ok) {
+                            break; // Success, exit the loop
+                        } else {
+                            lastError = `HTTP ${response.status}`;
+                        }
+                    } catch (error) {
+                        lastError = error.message;
+                        continue; // Try next endpoint
+                    }
+                }
+
+                if (!response || !response.ok) {
+                    throw new Error(`All endpoints failed. Last error: ${lastError}`);
                 }
 
                 const data = await response.json();
@@ -383,6 +420,9 @@
             statusDiv.textContent = message;
             statusDiv.style.display = 'block';
             setTimeout(() => statusDiv.style.display = 'none', 5000);
+            
+            // Also log to console for debugging
+            console.log(`Status (${type}):`, message);
         }
 
         function clearAllText() {
