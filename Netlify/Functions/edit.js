@@ -1,5 +1,11 @@
 // netlify/functions/edit.js
 // Netlify serverless function for Claude API integration
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY, // or process.env.ClaudeAPI
+});
+
 
 const TECHNIQUES = {
   MW: 'Material Witness',
@@ -10,6 +16,7 @@ const TECHNIQUES = {
   LO: 'Labor as Ontology',
   SAP: 'Sensory Anchor Portal'
 };
+
 
 const CHAPTER_MAP = {
   1: { MW: 1, NH: 2, TC: 1, SAP: 3 },
