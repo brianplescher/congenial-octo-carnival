@@ -9,11 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Editor-specific styles */
         .editor-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: var(--space-lg);
+            padding: 2rem;
         }
         
         .password-screen {
@@ -21,14 +20,13 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: var(--background);
         }
         
         .password-form {
             background: white;
-            padding: var(--space-2xl);
-            border-radius: var(--border-radius-md);
-            box-shadow: 0 4px 24px var(--softshadow);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
             max-width: 400px;
             width: 100%;
         }
@@ -36,66 +34,44 @@
         .editor-grid {
             display: grid;
             grid-template-columns: 1fr 2fr;
-            gap: var(--space-xl);
-            margin-top: var(--space-xl);
+            gap: 2rem;
+            margin-top: 2rem;
         }
         
         .controls-panel {
             background: white;
-            padding: var(--space-xl);
-            border-radius: var(--border-radius-md);
-            box-shadow: 0 4px 24px var(--softshadow);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
             height: fit-content;
             position: sticky;
-            top: var(--space-lg);
-        }
-        
-        .editor-main {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-lg);
-        }
-        
-        .text-input {
-            background: white;
-            border-radius: var(--border-radius-md);
-            box-shadow: 0 4px 24px var(--softshadow);
-            overflow: hidden;
+            top: 2rem;
         }
         
         .text-input textarea {
             width: 100%;
             min-height: 300px;
-            padding: var(--space-xl);
-            border: none;
+            padding: 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
             line-height: 1.6;
             resize: vertical;
-            background: transparent;
-        }
-        
-        .text-input textarea:focus {
-            outline: none;
-        }
-        
-        .paragraph-results {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-lg);
         }
         
         .paragraph-card {
             background: white;
-            border-radius: var(--border-radius-md);
-            box-shadow: 0 4px 24px var(--softshadow);
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
             overflow: hidden;
-            border-left: 4px solid var(--indigo);
+            border-left: 4px solid #6366f1;
         }
         
         .paragraph-header {
-            background: var(--footer);
-            padding: var(--space-md) var(--space-xl);
+            background: #f8f9fa;
+            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -103,114 +79,76 @@
         }
         
         .paragraph-content {
-            padding: var(--space-xl);
-        }
-        
-        .paragraph-actions {
-            display: flex;
-            gap: var(--space-sm);
+            padding: 1.5rem;
         }
         
         .btn-small {
-            padding: var(--space-xs) var(--space-md);
+            padding: 0.5rem 1rem;
             font-size: 0.9rem;
             border: none;
-            border-radius: var(--border-radius-sm);
+            border-radius: 4px;
             cursor: pointer;
             font-weight: 500;
-            transition: all var(--transition-fast);
+            transition: all 0.2s;
+            margin-left: 0.5rem;
         }
         
-        .btn-accept {
-            background: var(--success);
-            color: white;
-        }
-        
-        .btn-reject {
-            background: var(--error);
-            color: white;
-        }
-        
-        .btn-export {
-            background: var(--indigo);
-            color: white;
-        }
-        
-        .btn-small:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
+        .btn-accept { background: #10b981; color: white; }
+        .btn-reject { background: #ef4444; color: white; }
+        .btn-export { background: #6366f1; color: white; }
+        .btn-small:hover { transform: translateY(-1px); }
         
         .form-group {
-            margin-bottom: var(--space-lg);
+            margin-bottom: 1.5rem;
         }
         
         .form-group label {
             display: block;
             font-weight: 600;
-            margin-bottom: var(--space-sm);
-            color: var(--deepblue);
+            margin-bottom: 0.5rem;
         }
         
         .form-group select,
         .form-group textarea,
         .form-group input {
             width: 100%;
-            padding: var(--space-md);
+            padding: 0.75rem;
             border: 2px solid #e0e0e0;
-            border-radius: var(--border-radius-sm);
+            border-radius: 4px;
             font-family: inherit;
             font-size: 1rem;
-            transition: border-color var(--transition-fast);
         }
         
-        .form-group select:focus,
-        .form-group textarea:focus,
-        .form-group input:focus {
-            border-color: var(--indigo);
-            outline: none;
-        }
-        
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-lg);
-        }
-        
-        .processing {
-            opacity: 0.7;
-            pointer-events: none;
-        }
+        .processing { opacity: 0.7; pointer-events: none; }
         
         .error-message {
-            background: rgba(185, 28, 28, 0.1);
-            color: var(--error);
-            padding: var(--space-md);
-            border-radius: var(--border-radius-sm);
-            margin-top: var(--space-md);
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
         }
         
-        .guidance-preview {
-            background: var(--footer);
-            padding: var(--space-md);
-            border-radius: var(--border-radius-sm);
-            font-size: 0.9rem;
-            color: var(--muted);
-            white-space: pre-line;
-            max-height: 200px;
-            overflow-y: auto;
-            margin-top: var(--space-md);
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        
+        .analysis-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
         }
         
         @media (max-width: 1200px) {
-            .editor-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .controls-panel {
-                position: static;
-            }
+            .editor-grid { grid-template-columns: 1fr; }
+            .controls-panel { position: static; }
         }
     </style>
 </head>
@@ -218,26 +156,24 @@
     <!-- Password Screen -->
     <div id="passwordScreen" class="password-screen">
         <div class="password-form">
-            <h1 style="margin-bottom: var(--space-lg); text-align: center;">Hidden Editor Access</h1>
+            <h1 style="margin-bottom: 1.5rem; text-align: center;">Editor Access</h1>
             <div class="form-group">
                 <input type="password" id="passwordInput" placeholder="Enter password" />
             </div>
-            <button class="btnlink" onclick="checkPassword()" style="width: 100%;">Enter</button>
+            <button onclick="checkPassword()" style="width: 100%; padding: 0.75rem; background: #6366f1; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Enter</button>
             <div id="passwordError" class="error-message" style="display: none;">Incorrect password</div>
         </div>
     </div>
 
     <!-- Main Editor Interface -->
     <div id="editorInterface" style="display: none;">
-        <nav>
-            <div class="nav-left">
-                <div class="brand"><a href="index.html">Brian Plescher</a></div>
-                <span class="nav-separator">•</span>
-                <div class="nav-primary-link">Historical Fiction Editor</div>
-            </div>
-            <div class="navlinks">
-                <a href="index.html">Home</a>
-                <a href="essays.html">Essays</a>
+        <nav style="background: white; padding: 1rem 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 1.25rem; font-weight: 600;">Historical Fiction Editor</div>
+                <div>
+                    <a href="index.html" style="margin-left: 1.5rem;">Home</a>
+                    <a href="essays.html" style="margin-left: 1.5rem;">Essays</a>
+                </div>
             </div>
         </nav>
 
@@ -245,23 +181,17 @@
             <div class="editor-grid">
                 <!-- Controls Panel -->
                 <div class="controls-panel">
-                    <h2 style="margin-top: 0;">Editor Controls</h2>
-                    
-                    <div class="form-group">
-                        <label for="apiKey">OpenAI API Key (optional)</label>
-                        <input type="password" id="apiKey" placeholder="sk-..." />
-                        <small style="color: var(--muted); font-size: 0.9rem;">Leave blank to be prompted when needed</small>
-                    </div>
+                    <h2 style="margin-top: 0;">Controls</h2>
                     
                     <div class="form-group">
                         <label for="chapterSelect">Chapter</label>
-                        <select id="chapterSelect" onchange="updateGuidance()">
+                        <select id="chapterSelect">
                             <option value="1">Chapter 1</option>
                             <option value="2">Chapter 2</option>
                             <option value="3">Chapter 3</option>
                             <option value="4">Chapter 4</option>
                             <option value="5">Chapter 5</option>
-                            <option value="6">Chapter 6</option>
+                            <option value="6">Chapter 6 (Keystone)</option>
                             <option value="7">Chapter 7</option>
                             <option value="8">Chapter 8</option>
                             <option value="9">Chapter 9</option>
@@ -270,163 +200,54 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="customGuidance">Additional Context</label>
-                        <textarea id="customGuidance" rows="3" placeholder="Optional custom guidance..." onchange="updateGuidance()"></textarea>
+                        <label for="customContext">Additional Context</label>
+                        <textarea id="customContext" rows="3" placeholder="Optional scene-specific guidance..."></textarea>
                     </div>
                     
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="deletionMode" onchange="updateGuidance()">
-                        <label for="deletionMode">Deletion Mode (Remove excess)</label>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" id="deletionMode" style="width: auto; margin-right: 0.5rem;">
+                            <span>Deletion Mode (tighten existing)</span>
+                        </label>
                     </div>
                     
-                    <button class="btnlink" onclick="processText()" id="processBtn" style="width: 100%; margin-bottom: var(--space-md);">
+                    <button onclick="processText()" id="processBtn" style="width: 100%; padding: 0.75rem; background: #6366f1; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-bottom: 0.75rem;">
                         Process Text
                     </button>
                     
-                    <button class="btn-small btn-reject" onclick="clearAllText()" style="width: 100%;">
-                        Clear All Text
+                    <button onclick="clearAllText()" style="width: 100%; padding: 0.75rem; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                        Clear All
                     </button>
                     
-                    <div class="guidance-preview" id="guidancePreview"></div>
+                    <div id="statusMessage"></div>
                 </div>
 
                 <!-- Main Editor Area -->
-                <div class="editor-main">
-                    <div class="text-input">
-                        <textarea id="originalText" placeholder="Paste your text here to edit..."></textarea>
+                <div>
+                    <div class="text-input" style="background: white; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                        <textarea id="originalText" placeholder="Paste your text here (separate paragraphs with blank lines)..."></textarea>
                     </div>
                     
-                    <div id="results" class="paragraph-results"></div>
+                    <div id="results"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Core Data
-        const TECHNIQUES = {
-            MW: 'Material Witness',
-            PP: 'Polyphonic Possession', 
-            NH: 'Negative Historiography',
-            AK: 'Abjection as Knowledge',
-            TC: 'Temporal Collapse',
-            LO: 'Labor as Ontology',
-            SAP: 'Sensory Anchor Portal'
-        };
-
-        const CHAPTER_MAP = {
-            1: { MW: 1, NH: 2, TC: 1, SAP: 3 },
-            2: { NH: 3, SAP: 2 },
-            3: { MW: 3, NH: 1, SAP: 2 },
-            4: { PP: 3, TC: 3 },
-            5: { PP: 1, AK: 3, TC: 1 },
-            6: { MW: 3, PP: 3, NH: 3, AK: 1, TC: 3, SAP: 3 },
-            7: { AK: 3, LO: 3, SAP: 1 },
-            8: { MW: 1, PP: 2, NH: 3, TC: 1 },
-            9: { MW: 2, NH: 1, AK: 2, LO: 2 },
-            10: { MW: 2, PP: 1, TC: 2, LO: 2, SAP: 2 }
-        };
-
-        const PLOT_FUNCTIONS = {
-            1: "Entry/Threshold — narrator enters charged landscape, movement through space, first sensory anchor contact, no inciting incident",
-            2: "Orientation Through Absence — world explained by what's missing, gaps in records/maps, authority encountered indirectly", 
-            3: "Pattern Emergence — repetition reveals structure, objects recur, spaces revisited, quiet recognition through accumulation",
-            4: "Compression — pressure replaces progression, tasks accelerate, interior/exterior collapse, shift from observation to occupation",
-            5: "Fracture — narrative coherence fails, bodily strain/breakdown, contradictory sequences, crisis not climax",
-            6: "The Grinding Stones (KEYSTONE) — past and present fully coexist, historical labor intrudes bodily, possession not memory, structural center",
-            7: "Human Labor — meaning enacted not interpreted, sustained physical work, exhaustion replaces insight, rebuilds through body",
-            8: "Recognition Without Resolution — understanding arrives but solves nothing, awareness sharpens, no action follows, refuses catharsis",
-            9: "Reverberation — consequences unfold quietly, small gestures, spaces register what occurred, aftermath without spectacle",
-            10: "Integration/Exit — return to threshold, sensory anchor reappears altered, closure through recontextualization not resolution"
-        };
-
-        const FORBIDDEN = {
-            1: "No backstory. No motivation statements. No explanation of arrival.",
-            2: "No historical exposition. No corrective narration. No filling gaps.",
-            3: "No symbolic interpretation of objects. No thematic summary.",
-            4: "No pauses for reflection. No clarifying transitions.",
-            5: "No repair of coherence. No emotional resolution.",
-            6: "No dates. No named historical explanations. No interpretive framing of stones.",
-            7: "No metaphorical labor. No insight following work. No abstraction.",
-            8: "No decisions. No actions taken. No moral resolution.",
-            9: "No dramatization of aftermath. No explicit consequence statements.",
-            10: "No summative explanation. No meaning statements. No closure language."
-        };
-
-        // State
         let paragraphs = [];
-        let currentIndex = -1;
         let processing = false;
 
-        // Password check
         function checkPassword() {
             const input = document.getElementById('passwordInput').value;
-            const correctPassword = 'hidden123'; // You can change this
+            const correctPassword = 'stones'; // Change this
             
             if (input === correctPassword) {
                 document.getElementById('passwordScreen').style.display = 'none';
                 document.getElementById('editorInterface').style.display = 'block';
-                updateGuidance();
             } else {
                 document.getElementById('passwordError').style.display = 'block';
             }
-        }
-
-        // Generate guidance text
-        function generateTechniqueGuidance(chapterNum) {
-            const techniques = CHAPTER_MAP[chapterNum] || {};
-            const plotFunction = PLOT_FUNCTIONS[chapterNum] || '';
-            const deletionMode = document.getElementById('deletionMode').checked;
-            const customGuidance = document.getElementById('customGuidance').value;
-            
-            const dominant = [];
-            const active = [];
-            const present = [];
-            
-            Object.entries(techniques).forEach(([code, level]) => {
-                const name = TECHNIQUES[code];
-                if (level === 3) dominant.push(name);
-                else if (level === 2) active.push(name);
-                else if (level === 1) present.push(name);
-            });
-
-            let guidance = `CHAPTER ${chapterNum} ARCHITECTURE:\n${plotFunction}\n\n`;
-            guidance += `APPLY THESE TECHNIQUES:\n`;
-            if (dominant.length) guidance += `DOMINANT: ${dominant.join(', ')}\n`;
-            if (active.length) guidance += `ACTIVE: ${active.join(', ')}\n`;
-            if (present.length) guidance += `PRESENT: ${present.join(', ')}\n`;
-            
-            guidance += `\nTECHNIQUE DEFINITIONS:\n`;
-            guidance += `- Material Witness: Objects testify through wear/damage/persistence, not symbolism. NO interpretation.\n`;
-            guidance += `- Polyphonic Possession: Multiple consciousnesses inhabit narrator without quotation marks/framing. NO reflection on possession.\n`;
-            guidance += `- Negative Historiography: Meaning from gaps/erasure/missing docs. Name what's absent, don't fill it. NO exposition.\n`;
-            guidance += `- Abjection as Knowledge: Understanding through bodily degradation. Sensation BEFORE thought. NO aestheticizing suffering.\n`;
-            guidance += `- Temporal Collapse: Multiple times in same sentence, no hierarchy. NO clear before/after. NO flashback framing.\n`;
-            guidance += `- Labor as Ontology: Identity through repetitive physical work. Thought emerges FROM action. NO metaphorical labor.\n`;
-            guidance += `- Sensory Anchor Portal: Concrete sensation opens temporal layers involuntarily. NO "I remembered." NO explanation.\n\n`;
-            
-            guidance += `CRITICAL STRUCTURAL PRINCIPLE:\n`;
-            guidance += `This book's plot is TECTONIC not DRAMATIC. Pressure replaces conflict. Contact replaces climax. Reverberation replaces resolution. If a passage feels "slow" or "thin," that may be correct architecture. Do not add false drama. Do not create conflict where pressure suffices.\n`;
-
-            if (FORBIDDEN[chapterNum]) {
-                guidance += `\nFORBIDDEN IN THIS CHAPTER:\n${FORBIDDEN[chapterNum]}\n`;
-            }
-
-            if (deletionMode) {
-                guidance += `\nEDITING MODE:\nIf the paragraph already conforms, improve it by REMOVING excess explanation, softening emphasis, or tightening sentences. Do not add imagery or insight unless structurally necessary.\n`;
-            }
-
-            if (customGuidance) {
-                guidance += `\nADDITIONAL CONTEXT: ${customGuidance}`;
-            }
-
-            return guidance;
-        }
-
-        function updateGuidance() {
-            const chapter = document.getElementById('chapterSelect').value;
-            const guidance = generateTechniqueGuidance(parseInt(chapter));
-            document.getElementById('guidancePreview').textContent = guidance;
         }
 
         function splitIntoParagraphs(text) {
@@ -436,9 +257,13 @@
         async function processText() {
             const originalText = document.getElementById('originalText').value.trim();
             if (!originalText) {
-                alert('Please enter some text to process.');
+                showStatus('Please enter text to process.', 'error');
                 return;
             }
+
+            const chapter = document.getElementById('chapterSelect').value;
+            const deletionMode = document.getElementById('deletionMode').checked;
+            const customContext = document.getElementById('customContext').value;
 
             processing = true;
             document.getElementById('processBtn').textContent = 'Processing...';
@@ -449,136 +274,58 @@
                     id: index,
                     original: text,
                     edited: null,
+                    analysis: null,
                     status: 'pending'
                 }));
 
                 renderResults();
                 
-                // Process each paragraph
                 for (let i = 0; i < paragraphs.length; i++) {
-                    currentIndex = i;
-                    await processOneParagraph(i);
+                    await processOneParagraph(i, chapter, deletionMode, customContext);
                 }
 
+                showStatus('Processing complete!', 'success');
             } catch (error) {
                 console.error('Processing error:', error);
-                document.getElementById('results').innerHTML = `
-                    <div class="error-message">
-                        Error processing text: ${error.message}
-                    </div>
-                `;
+                showStatus(`Error: ${error.message}`, 'error');
             } finally {
                 processing = false;
                 document.getElementById('processBtn').textContent = 'Process Text';
                 document.getElementById('processBtn').disabled = false;
-                currentIndex = -1;
             }
         }
 
-        async function processOneParagraph(index) {
+        async function processOneParagraph(index, chapter, deletionMode, customContext) {
             const paragraph = paragraphs[index];
-            const chapter = document.getElementById('chapterSelect').value;
-            const guidance = generateTechniqueGuidance(parseInt(chapter));
-            
-            // Update UI to show processing
             renderResults();
 
             try {
-                // Simulate API call - replace with actual API endpoint
-                const response = await simulateAPICall(paragraph.original, guidance);
-                
-                paragraph.edited = response.edited_text;
+                const response = await fetch('/.netlify/functions/edit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: paragraph.original,
+                        chapter: parseInt(chapter),
+                        deletionMode: deletionMode,
+                        customContext: customContext
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                paragraph.edited = data.edited_text;
+                paragraph.analysis = data.analysis;
                 paragraph.status = 'completed';
-                
             } catch (error) {
                 paragraph.status = 'error';
                 paragraph.error = error.message;
             }
             
             renderResults();
-        }
-
-        // API call to process text
-        async function simulateAPICall(text, guidance) {
-            // First try the serverless function (if deployed on Vercel)
-            try {
-                const response = await fetch('/api/edit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        text: text,
-                        guidance: guidance
-                    })
-                });
-
-                if (response.ok) {
-                    return await response.json();
-                }
-            } catch (error) {
-                console.log('Serverless function not available, using direct API call');
-            }
-
-            // Fallback to direct OpenAI API call
-            let apiKey = document.getElementById('apiKey').value;
-            if (!apiKey) {
-                apiKey = prompt('Enter your OpenAI API key (this will not be stored):');
-                if (!apiKey) {
-                    throw new Error('API key required');
-                }
-            }
-
-            const prompt = `You are a historical fiction editor specializing in experimental narrative techniques. Your task is to edit the provided paragraph according to the specific guidance below.
-
-GUIDANCE:
-${guidance}
-
-PARAGRAPH TO EDIT:
-${text}
-
-Please edit this paragraph to align with the guidance. Return only the edited paragraph, no explanations or commentary.`;
-
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    model: 'gpt-4',
-                    messages: [
-                        {
-                            role: 'system',
-                            content: 'You are a skilled historical fiction editor who specializes in experimental narrative techniques. You edit text to conform to specific literary techniques while maintaining the original meaning and voice.'
-                        },
-                        {
-                            role: 'user',
-                            content: prompt
-                        }
-                    ],
-                    max_tokens: 1000,
-                    temperature: 0.7,
-                }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error?.message || `HTTP ${response.status}`);
-            }
-
-            const data = await response.json();
-            const editedText = data.choices[0]?.message?.content?.trim();
-
-            if (!editedText) {
-                throw new Error('No edited text received from AI');
-            }
-
-            return {
-                edited_text: editedText,
-                original_text: text,
-                guidance_used: guidance
-            };
         }
 
         function renderResults() {
@@ -589,111 +336,77 @@ Please edit this paragraph to align with the guidance. Return only the edited pa
                 return;
             }
 
-            resultsDiv.innerHTML = paragraphs.map((paragraph, index) => {
-                const isProcessing = currentIndex === index && processing;
-                const statusClass = paragraph.status === 'completed' ? 'completed' : 
-                                  paragraph.status === 'error' ? 'error' : 'pending';
-                
-                return `
-                    <div class="paragraph-card ${statusClass}">
-                        <div class="paragraph-header">
-                            <span>Paragraph ${index + 1}</span>
-                            <div class="paragraph-actions">
-                                ${paragraph.status === 'completed' ? `
-                                    <button class="btn-small btn-accept" onclick="acceptParagraph(${index})">Accept</button>
-                                    <button class="btn-small btn-reject" onclick="rejectParagraph(${index})">Reject</button>
-                                    <button class="btn-small btn-export" onclick="exportParagraph(${index})">Export</button>
-                                ` : ''}
-                            </div>
-                        </div>
-                        <div class="paragraph-content">
-                            <div style="margin-bottom: var(--space-md);">
-                                <strong>Original:</strong>
-                                <p style="margin-top: var(--space-sm); color: var(--muted);">${paragraph.original}</p>
-                            </div>
-                            ${paragraph.edited ? `
-                                <div>
-                                    <strong>Edited:</strong>
-                                    <p style="margin-top: var(--space-sm); color: var(--text);">${paragraph.edited}</p>
-                                </div>
-                            ` : isProcessing ? `
-                                <div style="color: var(--indigo); font-style: italic;">Processing...</div>
-                            ` : paragraph.status === 'error' ? `
-                                <div class="error-message">Error: ${paragraph.error}</div>
-                            ` : `
-                                <div style="color: var(--muted); font-style: italic;">Waiting to process...</div>
-                            `}
+            resultsDiv.innerHTML = paragraphs.map((p, i) => `
+                <div class="paragraph-card ${p.status}">
+                    <div class="paragraph-header">
+                        <span><strong>Paragraph ${i + 1}</strong></span>
+                        <div>
+                            ${p.status === 'completed' ? `
+                                <button class="btn-small btn-accept" onclick="acceptParagraph(${i})">Accept</button>
+                                <button class="btn-small btn-reject" onclick="rejectParagraph(${i})">Reject</button>
+                                <button class="btn-small btn-export" onclick="exportParagraph(${i})">Copy</button>
+                            ` : ''}
                         </div>
                     </div>
-                `;
-            }).join('');
+                    <div class="paragraph-content">
+                        ${p.analysis ? `<div class="analysis-box"><strong>Analysis:</strong> ${p.analysis}</div>` : ''}
+                        <div style="margin-bottom: 1.5rem;">
+                            <strong>Original:</strong>
+                            <p style="margin-top: 0.5rem; color: #6b7280;">${p.original}</p>
+                        </div>
+                        ${p.edited ? `
+                            <div>
+                                <strong>Edited:</strong>
+                                <p style="margin-top: 0.5rem;">${p.edited}</p>
+                            </div>
+                        ` : p.status === 'pending' ? `
+                            <div style="color: #6b7280; font-style: italic;">Waiting...</div>
+                        ` : p.status === 'error' ? `
+                            <div class="error-message">Error: ${p.error}</div>
+                        ` : `
+                            <div style="color: #6366f1; font-style: italic;">Processing...</div>
+                        `}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.className = type === 'error' ? 'error-message' : 'success-message';
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+            setTimeout(() => statusDiv.style.display = 'none', 5000);
         }
 
         function clearAllText() {
-            if (confirm('Are you sure you want to clear all text and results? This cannot be undone.')) {
-                // Clear the input textarea
+            if (confirm('Clear all text and results?')) {
                 document.getElementById('originalText').value = '';
-                
-                // Clear all results
                 paragraphs = [];
-                currentIndex = -1;
-                processing = false;
-                
-                // Reset UI
-                document.getElementById('results').innerHTML = '';
-                document.getElementById('processBtn').textContent = 'Process Text';
-                document.getElementById('processBtn').disabled = false;
-                
-                // Focus back to the textarea
-                document.getElementById('originalText').focus();
+                renderResults();
             }
         }
 
-        function acceptParagraph(index) {
-            paragraphs[index].status = 'accepted';
+        function acceptParagraph(i) {
+            paragraphs[i].status = 'accepted';
             renderResults();
         }
 
-        function rejectParagraph(index) {
-            paragraphs[index].status = 'rejected';
+        function rejectParagraph(i) {
+            paragraphs[i].status = 'rejected';
             renderResults();
         }
 
-        function exportParagraph(index) {
-            const paragraph = paragraphs[index];
-            const textToExport = paragraph.edited || paragraph.original;
-            
-            // Copy to clipboard
-            navigator.clipboard.writeText(textToExport).then(() => {
-                alert('Paragraph copied to clipboard!');
-            }).catch(() => {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = textToExport;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('Paragraph copied to clipboard!');
+        function exportParagraph(i) {
+            const text = paragraphs[i].edited || paragraphs[i].original;
+            navigator.clipboard.writeText(text).then(() => {
+                showStatus('Copied to clipboard!', 'success');
             });
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Allow Enter key in password field
-            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    checkPassword();
-                }
-            });
-            
-            // Add keyboard shortcut for clearing text (Ctrl/Cmd + Shift + Delete)
-            document.addEventListener('keydown', function(e) {
-                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Delete') {
-                    e.preventDefault();
-                    clearAllText();
-                }
-            });
+        document.getElementById('passwordInput')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
         });
     </script>
 </body>
