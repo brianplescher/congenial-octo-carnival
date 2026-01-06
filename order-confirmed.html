@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Order Confirmed | Brian L. Plescher</title>
+  <meta name="description" content="Thank you for your purchase. Your order has been confirmed." />
+
+  <!-- Canonical / Social -->
+  <link rel="canonical" href="https://www.brianplescher.com/order-confirmed.html">
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@700&display=swap" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    :root{
+      --background:#FAFAFA;--text:#18181B;--muted:#3F3F45;--deepblue:#3D4054;
+      --indigo:#5A6B99;--softshadow:#ececec;--footer:#f5f4f1;
+      --space-xs:.5rem;--space-sm:.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;
+      --space-2xl:3rem;--space-3xl:4rem;--text-sm:.875rem;--text-lg:1.125rem;
+      --text-xl:1.25rem;--text-2xl:1.5rem;--text-3xl:2rem;--border-radius-md:18px;--transition-base:.2s;
+    }
+
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--background);font-family:"Inter",sans-serif;color:var(--text);line-height:1.6;text-align:center;overflow-x:hidden}
+
+    /* NAV */
+    nav{display:flex;justify-content:space-between;align-items:center;padding:var(--space-xl) 5vw var(--space-lg) 4vw;}
+    .brand{font-family:"Space Grotesk",sans-serif;font-weight:700;color:var(--muted);font-size:var(--text-xl)}
+    .navlinks{display:flex;gap:var(--space-xl);}
+    .navlinks a{color:var(--muted);text-decoration:none;transition:color var(--transition-base)}
+    .navlinks a:hover{color:var(--deepblue)}
+
+    /* MAIN */
+    main{display:flex;flex-direction:column;align-items:center;justify-content:center;height:calc(100vh - 200px);padding:0 1.5rem}
+    h1{font-family:"Space Grotesk",sans-serif;font-size:var(--text-3xl);margin-bottom:var(--space-md);color:var(--text);}
+    p{font-size:var(--text-lg);color:var(--muted);margin-bottom:var(--space-xl);max-width:560px;}
+    .btn-home{display:inline-block;background:var(--deepblue);color:#fff;padding:.75rem 1.75rem;border-radius:10px;text-decoration:none;font-weight:600;transition:transform .2s,background .2s;}
+    .btn-home:hover{background:var(--indigo);transform:translateY(-3px);}
+
+    /* FOOTER */
+    footer{text-align:center;padding:var(--space-2xl) var(--space-lg) var(--space-lg);color:var(--muted);background:var(--footer);font-size:var(--text-sm);border-top:1px solid #e6e6e6}
+    
+    @media (max-width:730px){
+      nav{padding:var(--space-lg) var(--space-md)}
+       .navlinks{gap:var(--space-md)}
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="brand">Brian L. Plescher</div>
+    <div class="navlinks">
+      <a href="index.html">home</a>
+      <a href="woundwise.html">woundwise</a>
+      <a href="essays.html">essays</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 style="color: #4ade80;">Order Confirmed!</h1>
+    <p>Thank you for purchasing <strong>Woundwise</strong>.<br>
+      You should receive an email receipt from Stripe shortly.</p>
+    <a href="index.html" class="btn-home">Return to Home</a>
+  </main>
+
+  <footer>
+    &copy; 2025 Brian L. Plescher · Experimental methodologies for collective becoming.
+  </footer>
+</body>
+</html>
