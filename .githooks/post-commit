@@ -1,0 +1,4 @@
+#!/bin/sh
+# Post-commit hook to automatically push changes to the remote repository
+
+git push
