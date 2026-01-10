@@ -607,7 +607,7 @@ nav {
 }
 
 /* ==================== FOOTER ==================== */
-footer {
+body > footer {
   background: var(--charcoal);
   color: var(--background);
   text-align: center;
