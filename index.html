@@ -18,26 +18,36 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    .quote-librarything {
-      font-style: italic;
-      border-left: 4px solid #ccc;
-      margin: 1.5em 0;
-      padding: 0.5em 1em;
-      color: #333;
-    }
-    .quote-librarything footer {
-      text-align: right;
-      font-size: 0.9em;
-      margin-top: 0.5em;
-    }
-    .quote-librarything a {
-      text-decoration: underline;
-      color: #0066cc;
-    }
-    .quote-librarything a:hover {
-      color: #004499;
-    }
-  </style>
+  .quote-librarything {
+    font-style: italic;
+    border-left: 4px solid var(--indigo);
+    margin: var(--space-xl) 0;
+    padding: var(--space-sm) var(--space-lg);
+    color: var(--muted);
+    max-width: 65ch;
+  }
+
+  .quote-librarything footer {
+    text-align: right;
+    font-size: 0.9rem;
+    margin-top: var(--space-sm);
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--deepblue);
+  }
+
+  .quote-librarything a {
+    color: var(--deepblue);
+    text-decoration: underline;
+    transition: color var(--transition-fast);
+  }
+
+  .quote-librarything a:hover,
+  .quote-librarything a:focus {
+    color: var(--indigo);
+    outline: none;
+  }
+</style>
+
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Brian L. Plescher | Author of Woundwise">
