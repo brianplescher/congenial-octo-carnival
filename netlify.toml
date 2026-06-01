@@ -10,3 +10,55 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Redirects
+[[redirects]]
+  from = "/woundwise-leadership"
+  to = "/woundwise.html"
+  status = 301
+
+[[redirects]]
+  from = "/woundwise-leadership.html"
+  to = "/woundwise.html"
+  status = 301
+
+[[redirects]]
+  from = "/graph"
+  to = "/essays.html"
+  status = 301
+
+[[redirects]]
+  from = "/graph.html"
+  to = "/essays.html"
+  status = 301
+
+[[redirects]]
+  from = "/leadership"
+  to = "/woundwise.html"
+  status = 301
+
+[[redirects]]
+  from = "/the-directed-author"
+  to = "/the-directed-author.html"
+  status = 301
+
+[[redirects]]
+  from = "/woundwise"
+  to = "/woundwise.html"
+  status = 301
+
+[[redirects]]
+  from = "/slickens"
+  to = "/slickens.html"
+  status = 301
+
+[[redirects]]
+  from = "/essays"
+  to = "/essays.html"
+  status = 301
+
+[[redirects]]
+  from = "/read"
+  to = "/read.html"
+  status = 301

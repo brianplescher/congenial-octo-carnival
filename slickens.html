@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Slickens — Brian L. Plescher</title>
+  <meta name="description" content="Slickens: a novel of post-human cartography. Literary historical fiction by Brian L. Plescher. In progress.">
+
+  <link rel="canonical" href="https://www.brianplescher.com/slickens.html">
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <meta property="og:type" content="book">
+  <meta property="og:title" content="Slickens — Brian L. Plescher">
+  <meta property="og:description" content="A novel of post-human cartography. Literary historical fiction. In progress.">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <nav class="site-nav" role="navigation" aria-label="Main navigation">
+    <a href="/" class="nav-brand">Brian L. Plescher</a>
+    <button class="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links-list">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links-list">
+      <li><a href="/the-directed-author.html">The Directed Author</a></li>
+      <li><a href="/woundwise.html">Woundwise</a></li>
+      <li><a href="/slickens.html" class="active">Slickens</a></li>
+      <li><a href="/essays.html">Essays</a></li>
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main id="main">
+    <div class="slickens-page">
+      <div class="slickens-page-inner">
+        <div class="book-label" style="margin-bottom:1.5rem;">Coming</div>
+        <h1 class="slickens-page-title">Slickens</h1>
+        <p class="book-subtitle" style="margin-bottom:0.5rem;">A novel</p>
+        <p class="book-format" style="margin-bottom:2.5rem;">Literary historical fiction · In progress</p>
+
+        <p class="book-description" style="margin-bottom:1.25rem;">In the spent tailings fields of the industrial midwest, a surveyor is mapping territory that does not want to be mapped. Slickens is a novel of post-human cartography — of what happens to identity, language, and relation when the ground itself is waste, when the boundary between the human and the abject has dissolved so completely that dissolution becomes the only honest epistemology.</p>
+
+        <p class="book-description" style="margin-bottom:3rem;font-style:italic;color:var(--muted);">A long book made slowly, with full attention.</p>
+
+        <form class="email-form" style="margin:0 auto;" name="slickens-notify" method="POST" action="/thankyou.html" data-netlify="true">
+          <input type="hidden" name="form-name" value="slickens-notify">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email" aria-label="Email address for Slickens updates">
+          <button type="submit">Notify Me</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <ul class="footer-nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/the-directed-author.html">The Directed Author</a></li>
+      <li><a href="/woundwise.html">Woundwise</a></li>
+      <li><a href="/slickens.html">Slickens</a></li>
+      <li><a href="/essays.html">Essays</a></li>
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+    <div class="social-icons">
+      <a href="https://instagram.com/brianlplescher" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+      <a href="https://facebook.com/brianlplescher" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.linkedin.com/in/brianplescher" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+      <a href="https://www.youtube.com/@brianlplescher" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+      <a href="https://brianplescher.substack.com" aria-label="Substack" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-square-pen"></i></a>
+    </div>
+    <p class="footer-copy">© 2025 Brian L. Plescher</p>
+    <p class="footer-tagline">Decomposing gracefully.</p>
+  </footer>
+
+  <script>
+    const hamburger = document.querySelector('.nav-hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    hamburger.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      hamburger.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => { navLinks.classList.remove('open'); hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); });
+    });
+  </script>
+</body>
+</html>
