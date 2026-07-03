@@ -62,3 +62,23 @@
   from = "/read"
   to = "/read.html"
   status = 301
+
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 301
+
+[[redirects]]
+  from = "/now"
+  to = "/now.html"
+  status = 301
+
+[[redirects]]
+  from = "/books/the-directed-author"
+  to = "/books/the-directed-author.html"
+  status = 301
+
+[[redirects]]
+  from = "/books/woundwise"
+  to = "/books/woundwise.html"
+  status = 301

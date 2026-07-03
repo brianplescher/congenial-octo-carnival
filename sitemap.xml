@@ -3,45 +3,55 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.brianplescher.com/</loc>
-    <lastmod>2025-01-02</lastmod>
+    <lastmod>2026-07-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://www.brianplescher.com/images/woundwise_cover_seo.webp</image:loc>
-      <image:title>Woundwise Book Cover</image:title>
-    </image:image>
   </url>
   <url>
-    <loc>https://www.brianplescher.com/woundwise.html</loc>
-    <lastmod>2025-01-02</lastmod>
+    <loc>https://www.brianplescher.com/about</loc>
+    <lastmod>2026-07-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://www.brianplescher.com/images/woundwise_cover_seo.webp</image:loc>
-      <image:title>Woundwise: Dissolution, Abjective Ecology, and Subversive Becoming</image:title>
-    </image:image>
+  </url>
+  <url>
+    <loc>https://www.brianplescher.com/now</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.brianplescher.com/books/the-directed-author</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.brianplescher.com/books/woundwise</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.brianplescher.com/essays.html</loc>
-    <lastmod>2025-01-02</lastmod>
+    <lastmod>2026-07-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.brianplescher.com/essays.html#gift-of-hunger</loc>
-    <lastmod>2025-01-02</lastmod>
+    <lastmod>2026-07-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.brianplescher.com/essays.html#post-anthropocene</loc>
-    <lastmod>2025-01-02</lastmod>
+    <lastmod>2026-07-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.brianplescher.com/thankyou.html</loc>
-    <lastmod>2025-01-02</lastmod>
+    <lastmod>2026-07-03</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

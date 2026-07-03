@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Brian Plescher</title>
+    <link>https://www.brianplescher.com/</link>
+    <description>Essays and books on transformation, collapse, and the practice of thinking clearly in an unraveling world.</description>
+    <language>en-us</language>
+    <item>
+      <title>After SNAP: Mutual Aid in the Age of Abandonment</title>
+      <link>https://www.brianplescher.com/essays.html#gift-of-hunger</link>
+      <guid>https://www.brianplescher.com/essays.html#gift-of-hunger</guid>
+      <pubDate>Fri, 01 Nov 2025 00:00:00 GMT</pubDate>
+      <description>What happens when the safety nets unravel?</description>
+    </item>
+    <item>
+      <title>Post-Anthropocene: Dancing in the Burning Library</title>
+      <link>https://www.brianplescher.com/essays.html#post-anthropocene</link>
+      <guid>https://www.brianplescher.com/essays.html#post-anthropocene</guid>
+      <pubDate>Tue, 01 Oct 2025 00:00:00 GMT</pubDate>
+      <description>The world ends not with a bang, but with cascades.</description>
+    </item>
+  </channel>
+</rss>
