@@ -82,3 +82,8 @@
   from = "/books/woundwise"
   to = "/books/woundwise.html"
   status = 301
+
+[[redirects]]
+  from = "/books"
+  to = "/#books-heading"
+  status = 301
