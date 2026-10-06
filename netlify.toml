@@ -1,89 +1,147 @@
 # Netlify Configuration
 [build]
   publish = "."
-  functions = "netlify/functions"
 
-# Headers for security
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
 
-# Redirects
+# Redirects. force = true so a rule still applies when a file exists at the old path.
+
+[[redirects]]
+  from = "/woundwise"
+  to = "/books/woundwise"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/woundwise.html"
+  to = "/books/woundwise"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/woundwise-leadership"
-  to = "/woundwise.html"
+  to = "/books/woundwise"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/woundwise-leadership.html"
-  to = "/woundwise.html"
+  to = "/books/woundwise"
   status = 301
+  force = true
+
+[[redirects]]
+  from = "/leadership"
+  to = "/books/woundwise"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/books/woundwise.html"
+  to = "/books/woundwise"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/the-directed-author"
+  to = "/books/the-directed-author"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/the-directed-author.html"
+  to = "/books/the-directed-author"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/books/the-directed-author.html"
+  to = "/books/the-directed-author"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/about.html"
+  to = "/about"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/now.html"
+  to = "/now"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/graph"
   to = "/essays.html"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/graph.html"
   to = "/essays.html"
   status = 301
-
-[[redirects]]
-  from = "/leadership"
-  to = "/woundwise.html"
-  status = 301
-
-[[redirects]]
-  from = "/the-directed-author"
-  to = "/the-directed-author.html"
-  status = 301
-
-[[redirects]]
-  from = "/woundwise"
-  to = "/woundwise.html"
-  status = 301
-
-[[redirects]]
-  from = "/slickens"
-  to = "/slickens.html"
-  status = 301
+  force = true
 
 [[redirects]]
   from = "/essays"
   to = "/essays.html"
   status = 301
+  force = true
+
+[[redirects]]
+  from = "/slickens"
+  to = "/slickens.html"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/read"
   to = "/read.html"
   status = 301
-
-[[redirects]]
-  from = "/about"
-  to = "/about.html"
-  status = 301
-
-[[redirects]]
-  from = "/now"
-  to = "/now.html"
-  status = 301
-
-[[redirects]]
-  from = "/books/the-directed-author"
-  to = "/books/the-directed-author.html"
-  status = 301
-
-[[redirects]]
-  from = "/books/woundwise"
-  to = "/books/woundwise.html"
-  status = 301
+  force = true
 
 [[redirects]]
   from = "/books"
   to = "/#books-heading"
   status = 301
+  force = true
+
+[[redirects]]
+  from = "/CLAUDE.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/SEO-CHECKLIST.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.kiro/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.vscode/*"
+  to = "/404.html"
+  status = 404
+  force = true
