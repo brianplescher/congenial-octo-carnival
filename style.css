@@ -1583,10 +1583,6 @@ body { padding-top: 56px; }
   .header-inner {
     padding: 0 1rem;
   }
-
-  .main-nav {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
