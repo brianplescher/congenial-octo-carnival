@@ -8,41 +8,41 @@
   <title>Essays | Brian Plescher</title>
   <meta name="description"
     content="Essays on transformation, collapse, and the practice of thinking clearly in an unraveling world.">
-  <meta name="keywords"
-    content="Brian Plescher essays, authorship and AI, dissolution philosophy, mutual aid, experimental philosophy, post-anthropocene">
 
-  <link rel="canonical" href="https://www.brianplescher.com/essays.html">
+  <link rel="canonical" href="https://brianplescher.com/essays.html">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Essays — Brian L. Plescher">
   <meta property="og:description"
     content="Writing on authorship, AI collaboration, dissolution, and what it means to make things seriously in conditions that resist seriousness.">
-  <meta property="og:url" content="https://www.brianplescher.com/essays.html">
-  <meta property="og:image" content="https://www.brianplescher.com/images/woundwise_cover_seo.webp">
+  <meta property="og:url" content="https://brianplescher.com/essays.html">
+  <meta property="og:image" content="https://brianplescher.com/images/woundwise_cover_seo.webp">
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "@id": "https://www.brianplescher.com/essays.html#gift-of-hunger",
+    "@id": "https://brianplescher.com/essays.html#gift-of-hunger",
     "headline": "After SNAP: Mutual Aid in the Age of Abandonment",
-    "author": { "@type": "Person", "@id": "https://www.brianplescher.com/#brian", "name": "Brian L. Plescher" },
+    "author": { "@type": "Person", "@id": "https://brianplescher.com/#brian", "name": "Brian L. Plescher" },
     "datePublished": "2025-11-01",
     "inLanguage": "en",
-    "url": "https://www.brianplescher.com/essays.html#gift-of-hunger"
+    "url": "https://brianplescher.com/essays.html#gift-of-hunger"
   }
   </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "@id": "https://www.brianplescher.com/essays.html#post-anthropocene",
+    "@id": "https://brianplescher.com/essays.html#post-anthropocene",
     "headline": "Post-Anthropocene: Dancing in the Burning Library",
-    "author": { "@type": "Person", "@id": "https://www.brianplescher.com/#brian", "name": "Brian L. Plescher" },
+    "author": { "@type": "Person", "@id": "https://brianplescher.com/#brian", "name": "Brian L. Plescher" },
     "datePublished": "2025-10-01",
     "inLanguage": "en",
-    "url": "https://www.brianplescher.com/essays.html#post-anthropocene"
+    "url": "https://brianplescher.com/essays.html#post-anthropocene"
   }
   </script>
 
@@ -54,7 +54,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
@@ -200,8 +200,8 @@
             around us. We write from ruins not to mourn what's lost, but as Hélène Cixous urged, "to let it rot in the
             open air." The fire offers no healing, no return. It scorches the myth of human sovereignty, the fantasy of
             the bounded individual — that old philosophical fiction claiming earth belongs to us alone. These themes of
-            <a href="woundwise.html#breakdown">dissolution and breakdown</a> are central to my work in <a
-              href="woundwise.html">Woundwise</a>.</p>
+            <a href="/books/woundwise">dissolution and breakdown</a> are central to my work in <a
+              href="/books/woundwise">Woundwise</a>.</p>
 
           <h3>The Fantasy of Pure Media</h3>
           <p>Someone posted a meme recently: "Fuck Social Media. Marry Books. Kill AI."</p>
@@ -222,8 +222,8 @@
           That's the whole deal.</p>
         <form class="email-form" name="essay-subscribe" method="POST" action="/thankyou.html" data-netlify="true">
           <input type="hidden" name="form-name" value="essay-subscribe">
-          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email"
-            aria-label="Email address">
+          <label for="essay-email" class="sr-only">Email address</label>
+          <input type="email" id="essay-email" name="email" placeholder="your@email.com" required autocomplete="email">
           <button type="submit">Subscribe</button>
         </form>
         <p class="newsletter-body" style="margin-top:1rem;">Powered by MailerLite. Unsubscribe any time.</p>
@@ -262,22 +262,7 @@
         style="color:inherit;text-decoration:none;">Sonexial</a>. Author infrastructure. Engineered for discovery.</p>
   </footer>
 
-  <script>
-    const hamburger = document.querySelector('.nav-hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    hamburger.addEventListener('click', () => {
-      const open = navLinks.classList.toggle('open');
-      hamburger.classList.toggle('open', open);
-      hamburger.setAttribute('aria-expanded', open);
-    });
-    navLinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => { navLinks.classList.remove('open'); hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); });
-    });
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-  </script>
+  <script src="/js/nav.js" defer></script>
 </body>
 
 </html>

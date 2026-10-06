@@ -56,6 +56,26 @@ main#main {
   min-height: calc(100vh - 280px);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -214,7 +234,23 @@ main#main {
     display: flex;
     align-items: center;
   }
-  .main-nav { display: none; }
+  .main-nav {
+    display: none;
+    position: fixed;
+    top: 56px; left: 0; right: 0;
+    background: rgba(13, 17, 23, 0.98);
+    flex-direction: column;
+    gap: 0;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .main-nav.open { display: flex; }
+  .main-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 14px 2rem;
+  }
 }
 
 body { padding-top: 56px; }

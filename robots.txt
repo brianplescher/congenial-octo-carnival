@@ -16,4 +16,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://www.brianplescher.com/sitemap.xml
+Sitemap: https://brianplescher.com/sitemap.xml
